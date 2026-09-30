@@ -56,10 +56,10 @@ function Landing() {
         </div>
       </header>
 
-      <section className="relative flex min-h-screen items-center px-6 pt-12">
+      <section className="relative flex min-h-screen items-center px-6 py-24">
         <div className="hero-aurora" />
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-16 md:grid-cols-2">
-          <div className="animate-hero-in order-2 space-y-4 [animation-delay:200ms] md:order-1">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
+          <div className="animate-hero-in order-2 space-y-3 [animation-delay:200ms] md:order-1">
             {heroStats.map((s, i) => (
               <div
                 key={s.label}
@@ -73,7 +73,7 @@ function Landing() {
                 </div>
               </div>
             ))}
-            <p className="animate-hero-in pl-1 text-sm text-muted-foreground [animation-delay:800ms]">
+            <p className="animate-hero-in pl-1 pt-2 text-sm leading-relaxed text-muted-foreground [animation-delay:800ms]">
               An autonomous deception persona answers real SSH, HTTP and API traffic — and turns it into forensics.
             </p>
           </div>
