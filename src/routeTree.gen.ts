@@ -10,7 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedConsoleRouteImport } from './routes/_authenticated/console'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedIocsRouteImport } from './routes/_authenticated/iocs'
+import { Route as AuthenticatedPersonasRouteImport } from './routes/_authenticated/personas'
+import { Route as AuthenticatedSensorsRouteImport } from './routes/_authenticated/sensors'
+import { Route as AuthenticatedSessionsIdRouteImport } from './routes/_authenticated/sessions.$id'
 import { Route as ApiPublicSensorIngestRouteImport } from './routes/api/public/sensor/ingest'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,10 +25,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedConsoleRoute = AuthenticatedConsoleRouteImport.update({
+  id: '/console',
+  path: '/console',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedIocsRoute = AuthenticatedIocsRouteImport.update({
+  id: '/iocs',
+  path: '/iocs',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPersonasRoute = AuthenticatedPersonasRouteImport.update({
+  id: '/personas',
+  path: '/personas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSensorsRoute = AuthenticatedSensorsRouteImport.update({
+  id: '/sensors',
+  path: '/sensors',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSessionsIdRoute = AuthenticatedSessionsIdRouteImport.update({
+  id: '/sessions/$id',
+  path: '/sessions/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiPublicSensorIngestRoute = ApiPublicSensorIngestRouteImport.update({
   id: '/api/public/sensor/ingest',
@@ -32,29 +73,78 @@ const ApiPublicSensorIngestRoute = ApiPublicSensorIngestRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/console': typeof AuthenticatedConsoleRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/iocs': typeof AuthenticatedIocsRoute
+  '/personas': typeof AuthenticatedPersonasRoute
+  '/sensors': typeof AuthenticatedSensorsRoute
+  '/sessions/$id': typeof AuthenticatedSessionsIdRoute
   '/api/public/sensor/ingest': typeof ApiPublicSensorIngestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/console': typeof AuthenticatedConsoleRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/iocs': typeof AuthenticatedIocsRoute
+  '/personas': typeof AuthenticatedPersonasRoute
+  '/sensors': typeof AuthenticatedSensorsRoute
+  '/sessions/$id': typeof AuthenticatedSessionsIdRoute
   '/api/public/sensor/ingest': typeof ApiPublicSensorIngestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/console': typeof AuthenticatedConsoleRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/iocs': typeof AuthenticatedIocsRoute
+  '/_authenticated/personas': typeof AuthenticatedPersonasRoute
+  '/_authenticated/sensors': typeof AuthenticatedSensorsRoute
+  '/_authenticated/sessions/$id': typeof AuthenticatedSessionsIdRoute
   '/api/public/sensor/ingest': typeof ApiPublicSensorIngestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/api/public/sensor/ingest'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/console'
+    | '/dashboard'
+    | '/iocs'
+    | '/personas'
+    | '/sensors'
+    | '/sessions/$id'
+    | '/api/public/sensor/ingest'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/api/public/sensor/ingest'
-  id: '__root__' | '/' | '/auth' | '/api/public/sensor/ingest'
+  to:
+    | '/'
+    | '/auth'
+    | '/console'
+    | '/dashboard'
+    | '/iocs'
+    | '/personas'
+    | '/sensors'
+    | '/sessions/$id'
+    | '/api/public/sensor/ingest'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/console'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/iocs'
+    | '/_authenticated/personas'
+    | '/_authenticated/sensors'
+    | '/_authenticated/sessions/$id'
+    | '/api/public/sensor/ingest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiPublicSensorIngestRoute: typeof ApiPublicSensorIngestRoute
 }
@@ -68,12 +158,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/console': {
+      id: '/_authenticated/console'
+      path: '/console'
+      fullPath: '/console'
+      preLoaderRoute: typeof AuthenticatedConsoleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/iocs': {
+      id: '/_authenticated/iocs'
+      path: '/iocs'
+      fullPath: '/iocs'
+      preLoaderRoute: typeof AuthenticatedIocsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/personas': {
+      id: '/_authenticated/personas'
+      path: '/personas'
+      fullPath: '/personas'
+      preLoaderRoute: typeof AuthenticatedPersonasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sensors': {
+      id: '/_authenticated/sensors'
+      path: '/sensors'
+      fullPath: '/sensors'
+      preLoaderRoute: typeof AuthenticatedSensorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sessions/$id': {
+      id: '/_authenticated/sessions/$id'
+      path: '/sessions/$id'
+      fullPath: '/sessions/$id'
+      preLoaderRoute: typeof AuthenticatedSessionsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/sensor/ingest': {
       id: '/api/public/sensor/ingest'
@@ -85,8 +224,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedConsoleRoute: typeof AuthenticatedConsoleRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedIocsRoute: typeof AuthenticatedIocsRoute
+  AuthenticatedPersonasRoute: typeof AuthenticatedPersonasRoute
+  AuthenticatedSensorsRoute: typeof AuthenticatedSensorsRoute
+  AuthenticatedSessionsIdRoute: typeof AuthenticatedSessionsIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedConsoleRoute: AuthenticatedConsoleRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedIocsRoute: AuthenticatedIocsRoute,
+  AuthenticatedPersonasRoute: AuthenticatedPersonasRoute,
+  AuthenticatedSensorsRoute: AuthenticatedSensorsRoute,
+  AuthenticatedSessionsIdRoute: AuthenticatedSessionsIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiPublicSensorIngestRoute: ApiPublicSensorIngestRoute,
 }
