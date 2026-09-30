@@ -14,7 +14,269 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          command: string | null
+          created_at: string
+          description: string
+          id: string
+          mitre_technique: string | null
+          owner_id: string
+          session_id: string
+          severity: string
+          title: string
+        }
+        Insert: {
+          command?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          mitre_technique?: string | null
+          owner_id: string
+          session_id: string
+          severity?: string
+          title: string
+        }
+        Update: {
+          command?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          mitre_technique?: string | null
+          owner_id?: string
+          session_id?: string
+          severity?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      iocs: {
+        Row: {
+          context: string
+          created_at: string
+          id: string
+          ioc_type: string
+          owner_id: string
+          session_id: string
+          value: string
+        }
+        Insert: {
+          context?: string
+          created_at?: string
+          id?: string
+          ioc_type: string
+          owner_id: string
+          session_id: string
+          value: string
+        }
+        Update: {
+          context?: string
+          created_at?: string
+          id?: string
+          ioc_type?: string
+          owner_id?: string
+          session_id?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iocs_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      personas: {
+        Row: {
+          created_at: string
+          description: string
+          hostname: string
+          id: string
+          is_builtin: boolean
+          lure_details: string
+          name: string
+          os: string
+          owner_id: string | null
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          hostname: string
+          id?: string
+          is_builtin?: boolean
+          lure_details?: string
+          name: string
+          os?: string
+          owner_id?: string | null
+          username?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          hostname?: string
+          id?: string
+          is_builtin?: boolean
+          lure_details?: string
+          name?: string
+          os?: string
+          owner_id?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
+      sensors: {
+        Row: {
+          created_at: string
+          id: string
+          key_hash: string
+          key_prefix: string
+          last_seen_at: string | null
+          name: string
+          owner_id: string
+          persona_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_hash: string
+          key_prefix: string
+          last_seen_at?: string | null
+          name: string
+          owner_id: string
+          persona_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          last_seen_at?: string | null
+          name?: string
+          owner_id?: string
+          persona_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sensors_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "personas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_events: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          kind: string
+          metadata: Json
+          owner_id: string
+          session_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          kind: string
+          metadata?: Json
+          owner_id: string
+          session_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          metadata?: Json
+          owner_id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          attacker_user: string | null
+          cwd: string
+          id: string
+          last_activity_at: string
+          owner_id: string
+          persona_id: string
+          protocol: string
+          risk_score: number
+          sensor_id: string | null
+          source: string
+          source_ip: string | null
+          started_at: string
+          summary: string | null
+        }
+        Insert: {
+          attacker_user?: string | null
+          cwd?: string
+          id?: string
+          last_activity_at?: string
+          owner_id: string
+          persona_id: string
+          protocol?: string
+          risk_score?: number
+          sensor_id?: string | null
+          source?: string
+          source_ip?: string | null
+          started_at?: string
+          summary?: string | null
+        }
+        Update: {
+          attacker_user?: string | null
+          cwd?: string
+          id?: string
+          last_activity_at?: string
+          owner_id?: string
+          persona_id?: string
+          protocol?: string
+          risk_score?: number
+          sensor_id?: string | null
+          source?: string
+          source_ip?: string | null
+          started_at?: string
+          summary?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "personas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sessions_sensor_id_fkey"
+            columns: ["sensor_id"]
+            isOneToOne: false
+            referencedRelation: "sensors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
