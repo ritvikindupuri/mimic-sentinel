@@ -1,5 +1,3 @@
-import { createOpenAI } from "@ai-sdk/openai";
-import { streamText } from "ai";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -7,9 +5,23 @@ type DB = SupabaseClient<Database>;
 
 export type TurnAlert = { severity: string; title: string; mitre_technique: string | null; description: string };
 export type TurnIoc = { ioc_type: string; value: string; context: string };
-export type TurnResult = { output: string; cwd: string; risk: number; alerts: TurnAlert[]; iocs: TurnIoc[] };
+export type AiStatus = { ok: boolean; message: string };
+export type TurnResult = { output: string; cwd: string; risk: number; alerts: TurnAlert[]; iocs: TurnIoc[]; ai: AiStatus };
+
+/** Newest, most capable OpenAI chat model on the gateway (verified against the live model list). */
+export const AI_MODEL = "openai/gpt-6-astra";
 
 const SEVERITIES = new Set(["low", "medium", "high", "critical"]);
+
+function describeAiError(e: unknown): string {
+  const status = (e as { statusCode?: number; status?: number })?.statusCode ?? (e as { status?: number })?.status;
+  if (status === 402) return "AI credits are used up — add credits to resume live responses.";
+  if (status === 429) return "AI engine is rate limited — try again in a moment.";
+  if (status === 401 || status === 403) return "AI engine access was denied — check the workspace AI settings.";
+  const msg = e instanceof Error ? e.message : String(e);
+  if (/Cannot find module|LOVABLE_API_KEY/.test(msg)) return "AI engine is not configured on the server.";
+  return "AI engine is unavailable right now — showing a fallback response.";
+}
 
 function buildSystemPrompt(p: Database["public"]["Tables"]["personas"]["Row"], cwd: string) {
   return `You are two engines running inside a deception honeynet.
@@ -41,13 +53,15 @@ function extractJson(text: string): Partial<TurnResult> | null {
 async function callModel(system: string, transcript: string, command: string) {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("AI is not configured (missing LOVABLE_API_KEY).");
+  // Loaded lazily so a missing package degrades the console instead of crashing the whole server.
+  const [{ createOpenAI }, { streamText }] = await Promise.all([import("@ai-sdk/openai"), import("ai")]);
   const provider = createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",
     apiKey,
     headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
   });
   const result = streamText({
-    model: provider.responses("openai/gpt-6-astra"),
+    model: provider.responses(AI_MODEL),
     system,
     messages: [
       {
@@ -97,10 +111,13 @@ export async function runDeceptionTurn(db: DB, sessionId: string, command: strin
   });
 
   let parsed: Partial<TurnResult> | null = null;
+  let ai: AiStatus = { ok: true, message: "AI engine online" };
   try {
     parsed = extractJson(await callModel(buildSystemPrompt(persona, session.cwd), transcript, command));
+    if (!parsed) ai = { ok: false, message: "AI engine returned an unreadable reply — showing a fallback response." };
   } catch (e) {
     console.error("deception model error", e);
+    ai = { ok: false, message: describeAiError(e) };
   }
   const bin = command.trim().split(/\s+/)[0] ?? "";
   const result: TurnResult = {
@@ -109,6 +126,7 @@ export async function runDeceptionTurn(db: DB, sessionId: string, command: strin
     risk: Math.max(session.risk_score, Math.min(100, Math.max(0, Number(parsed?.risk) || 0))),
     alerts: Array.isArray(parsed?.alerts) ? parsed!.alerts!.slice(0, 5) : [],
     iocs: Array.isArray(parsed?.iocs) ? parsed!.iocs!.slice(0, 10) : [],
+    ai,
   };
 
   await db.from("session_events").insert({
