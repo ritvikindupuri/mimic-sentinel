@@ -95,12 +95,12 @@ function ConsolePage() {
       e.preventDefault();
       const n = Math.min(hIdx + 1, hist.length - 1);
       setHIdx(n);
-      setInput(hist[n]);
+      setInput(hist[n] ?? "");
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       const n = hIdx - 1;
       setHIdx(n);
-      setInput(n >= 0 ? hist[n] : "");
+      setInput(n >= 0 ? (hist[n] ?? "") : "");
     }
   }
 

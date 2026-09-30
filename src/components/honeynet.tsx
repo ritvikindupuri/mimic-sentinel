@@ -9,7 +9,7 @@ const sev: Record<string, string> = {
 
 export function SeverityBadge({ severity }: { severity: string }) {
   return (
-    <span className={cn("rounded px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase", sev[severity] ?? sev.low)}>
+    <span className={cn("rounded px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase", sev[severity] ?? sev['low'])}>
       {severity}
     </span>
   );

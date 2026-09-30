@@ -37,7 +37,7 @@ function SensorsPage() {
 
   async function add(e: React.FormEvent) {
     e.preventDefault();
-    if (!personaId) return toast.error("Pick a persona");
+    if (!personaId) { toast.error("Pick a persona"); return; }
     try {
       const r = await create({ data: { name, personaId } });
       setNewKey(r.key);
