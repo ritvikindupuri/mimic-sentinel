@@ -37,6 +37,7 @@ function ConsolePage() {
   const [iocs, setIocs] = useState<TurnIoc[]>([]);
   const [hist, setHist] = useState<string[]>([]);
   const [hIdx, setHIdx] = useState(-1);
+  const [ai, setAi] = useState<{ ok: boolean; message: string } | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const persona = personas.find((p) => p.id === personaId);
 
@@ -81,10 +82,15 @@ function ConsolePage() {
       setLines((l) => [...l, { kind: "out", text: r.output }]);
       setSession({ ...session, cwd: r.cwd });
       setRisk(r.risk);
+      setAi(r.ai);
+      if (!r.ai.ok) toast.warning(r.ai.message);
       if (r.alerts.length) setAlerts((a) => [...r.alerts, ...a]);
       if (r.iocs.length) setIocs((a) => [...r.iocs, ...a]);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Command failed");
+      const msg = err instanceof Error ? err.message : "Command failed";
+      setAi({ ok: false, message: msg });
+      setLines((l) => [...l, { kind: "out", text: `[console] ${msg}` }]);
+      toast.error(msg);
     } finally {
       setBusy(false);
     }
@@ -113,6 +119,11 @@ function ConsolePage() {
           </Button>
         )}
       </PageHeader>
+
+      <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground" role="status">
+        <span className={`h-2 w-2 rounded-full ${ai === null ? "bg-muted-foreground" : ai.ok ? "bg-success" : "bg-destructive animate-pulse"}`} />
+        {ai === null ? "AI engine: waiting for first command" : ai.ok ? "AI engine online" : ai.message}
+      </div>
 
       <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4">
         <div className="w-72">
