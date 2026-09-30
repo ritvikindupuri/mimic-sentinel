@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Wand2, Eye, RadioTower, ShieldCheck, TerminalSquare, Fingerprint } from "lucide-react";
 import { MirageLogo3D, MirageMark } from "@/components/mirage-logo";
 
 export const Route = createFileRoute("/")({
@@ -28,9 +29,15 @@ function useReveal() {
 }
 
 const moments = [
-  { k: "01", title: "It improvises.", line: "Every command answered like a real host." },
-  { k: "02", title: "It watches.", line: "Each keystroke mapped to MITRE, live." },
-  { k: "03", title: "It reports.", line: "Alerts and IOCs, straight to your SIEM." },
+  { k: "01", icon: Wand2, title: "It improvises.", line: "Every command answered like a real host." },
+  { k: "02", icon: Eye, title: "It watches.", line: "Each keystroke mapped to MITRE, live." },
+  { k: "03", icon: RadioTower, title: "It reports.", line: "Alerts and IOCs, straight to your SIEM." },
+];
+
+const heroStats = [
+  { icon: TerminalSquare, label: "Keystrokes captured", value: "Every one" },
+  { icon: Fingerprint, label: "Fingerprintable", value: "Never" },
+  { icon: ShieldCheck, label: "Real infrastructure touched", value: "None" },
 ];
 
 function Landing() {
@@ -49,29 +56,52 @@ function Landing() {
         </div>
       </header>
 
-      <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-12 text-center">
+      <section className="relative flex min-h-screen items-center px-6 pt-12">
         <div className="hero-aurora" />
-        <div className="animate-hero-in [animation-delay:100ms]">
-          <MirageLogo3D />
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-16 md:grid-cols-2">
+          <div className="animate-hero-in order-2 space-y-4 [animation-delay:200ms] md:order-1">
+            {heroStats.map((s, i) => (
+              <div
+                key={s.label}
+                className="animate-hero-in flex items-center gap-4 rounded-2xl border border-border/60 bg-card/40 px-5 py-4 backdrop-blur-sm"
+                style={{ animationDelay: `${300 + i * 150}ms` }}
+              >
+                <s.icon className="h-5 w-5 shrink-0 text-primary" />
+                <div className="min-w-0">
+                  <div className="truncate text-xs text-muted-foreground">{s.label}</div>
+                  <div className="font-display text-lg font-semibold tracking-tight">{s.value}</div>
+                </div>
+              </div>
+            ))}
+            <p className="animate-hero-in pl-1 text-sm text-muted-foreground [animation-delay:800ms]">
+              An autonomous deception persona answers real SSH, HTTP and API traffic — and turns it into forensics.
+            </p>
+          </div>
+
+          <div className="order-1 flex flex-col items-center text-center md:order-2 md:items-end md:text-right">
+            <div className="animate-hero-in [animation-delay:100ms]">
+              <MirageLogo3D />
+            </div>
+            <h1 className="animate-hero-in mt-4 font-display text-6xl font-semibold tracking-tighter [animation-delay:350ms] md:text-8xl">
+              Mirage
+            </h1>
+            <p className="animate-hero-in mt-4 text-xl text-muted-foreground [animation-delay:550ms] md:text-2xl">
+              The honeynet they can't see through.
+            </p>
+            <div className="animate-hero-in mt-10 flex items-center gap-6 [animation-delay:750ms]">
+              <Link
+                to="/auth"
+                className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform duration-300 hover:scale-105"
+              >
+                Enter the console
+              </Link>
+              <a href="#how" className="text-sm text-primary transition-opacity hover:opacity-70">
+                See how ›
+              </a>
+            </div>
+          </div>
         </div>
-        <h1 className="animate-hero-in mt-4 font-display text-6xl font-semibold tracking-tighter [animation-delay:350ms] md:text-8xl">
-          Mirage
-        </h1>
-        <p className="animate-hero-in mt-4 text-xl text-muted-foreground [animation-delay:550ms] md:text-2xl">
-          The honeynet they can't see through.
-        </p>
-        <div className="animate-hero-in mt-10 flex items-center gap-6 [animation-delay:750ms]">
-          <Link
-            to="/auth"
-            className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform duration-300 hover:scale-105"
-          >
-            Enter the console
-          </Link>
-          <a href="#how" className="text-sm text-primary transition-opacity hover:opacity-70">
-            See how ›
-          </a>
-        </div>
-        <div className="scroll-cue absolute bottom-8 h-10 w-px bg-gradient-to-b from-transparent to-muted-foreground/60" />
+        <div className="scroll-cue absolute bottom-8 left-1/2 h-10 w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-muted-foreground/60" />
       </section>
 
       <section id="how" className="mx-auto max-w-5xl px-6 py-40">
@@ -80,20 +110,30 @@ function Landing() {
           <br />
           <span className="text-muted-foreground">That's all it takes to spot a fake.</span>
         </h2>
+        <p className="reveal mx-auto mt-6 max-w-xl text-center text-muted-foreground [transition-delay:100ms]">
+          Mirage answers like a real host — while the forensic engine silently tags the technique.
+        </p>
 
-        <div className="reveal mx-auto mt-24 max-w-3xl overflow-hidden rounded-2xl border border-border bg-terminal shadow-2xl [transition-delay:150ms]">
-          <div className="flex items-center gap-1.5 border-b border-border px-4 py-3">
-            <span className="h-2.5 w-2.5 rounded-full bg-muted" />
-            <span className="h-2.5 w-2.5 rounded-full bg-muted" />
-            <span className="h-2.5 w-2.5 rounded-full bg-muted" />
-          </div>
-          <pre className="whitespace-pre-wrap p-6 text-left font-mono text-sm leading-relaxed text-terminal-foreground">
-            <span className="typing">{`$ systemctl status nginx | head -3
+        <div className="reveal relative mx-auto mt-24 max-w-3xl [transition-delay:150ms]">
+          <div className="pointer-events-none absolute -inset-8 rounded-[2rem] bg-primary/10 blur-3xl" />
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-terminal shadow-2xl">
+            <div className="flex items-center gap-1.5 border-b border-border px-4 py-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-muted" />
+              <span className="h-2.5 w-2.5 rounded-full bg-muted" />
+              <span className="h-2.5 w-2.5 rounded-full bg-muted" />
+              <span className="ml-3 font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                live session · k8s-bastion-04
+              </span>
+            </div>
+            <pre className="whitespace-pre-wrap p-6 text-left font-mono text-sm leading-relaxed text-terminal-foreground">
+              <span className="typing">{`$ systemctl status nginx | head -3
 ● nginx.service - A high performance web server
      Active: active (running) since Tue 09:14:02 UTC; 3 days ago`}</span>
-          </pre>
-          <div className="border-t border-border bg-destructive/10 px-6 py-3 font-mono text-xs text-destructive">
-            ● T1082 System Discovery — logged
+            </pre>
+            <div className="flex items-center gap-2 border-t border-border bg-destructive/10 px-6 py-3 font-mono text-xs text-destructive">
+              <Eye className="h-3.5 w-3.5 shrink-0" />
+              T1082 System Discovery — logged
+            </div>
           </div>
         </div>
       </section>
@@ -101,7 +141,10 @@ function Landing() {
       <section className="mx-auto grid max-w-6xl gap-px px-6 pb-40 md:grid-cols-3">
         {moments.map((m, i) => (
           <div key={m.k} className="reveal p-8" style={{ transitionDelay: `${i * 120}ms` }}>
-            <div className="font-mono text-xs text-primary">{m.k}</div>
+            <div className="flex items-center justify-between">
+              <div className="font-mono text-xs text-primary">{m.k}</div>
+              <m.icon className="h-5 w-5 text-primary/70" />
+            </div>
             <h3 className="mt-4 font-display text-3xl font-semibold tracking-tight">{m.title}</h3>
             <p className="mt-2 text-muted-foreground">{m.line}</p>
           </div>
