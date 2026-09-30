@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { MirageMark } from "@/components/mirage-logo";
 import { useQueryClient } from "@tanstack/react-query";
 import { LayoutDashboard, TerminalSquare, UserCog, Radio, Fingerprint, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,7 +36,7 @@ function Shell() {
     <div className="flex min-h-screen bg-background">
       <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4">
         <div className="mb-8 flex items-center gap-2 px-2 font-display text-lg font-semibold">
-          <span className="grid h-7 w-7 place-items-center rounded bg-primary font-mono text-sm text-primary-foreground">M</span>
+          <MirageMark className="h-7 w-7 text-primary" />
           Mirage
         </div>
         <nav className="flex flex-1 flex-col gap-1">

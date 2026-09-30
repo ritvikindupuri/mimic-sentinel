@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { MirageMark } from "@/components/mirage-logo";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -61,7 +62,7 @@ function AuthPage() {
     <div className="grid min-h-screen place-items-center bg-background px-4">
       <div className="w-full max-w-sm rounded-lg border border-border bg-card p-8">
         <div className="mb-6 flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="grid h-7 w-7 place-items-center rounded bg-primary font-mono text-sm text-primary-foreground">M</span>
+          <MirageMark className="h-7 w-7 text-primary" />
           Mirage
         </div>
         <h1 className="font-display text-2xl font-semibold">{mode === "in" ? "Analyst sign in" : "Create account"}</h1>
