@@ -111,7 +111,7 @@ function Landing() {
           <span className="text-muted-foreground">That's all it takes to spot a fake.</span>
         </h2>
         <p className="reveal mx-auto mt-6 max-w-xl text-center text-muted-foreground [transition-delay:100ms]">
-          Mirage answers like a real host — while the forensic engine silently tags the technique.
+          Here's one real moment from a honeynet session — three things happen at once.
         </p>
 
         <div className="reveal relative mx-auto mt-24 max-w-3xl [transition-delay:150ms]">
@@ -125,14 +125,33 @@ function Landing() {
                 live session · k8s-bastion-04
               </span>
             </div>
-            <pre className="whitespace-pre-wrap p-6 text-left font-mono text-sm leading-relaxed text-terminal-foreground">
-              <span className="typing">{`$ systemctl status nginx | head -3
-● nginx.service - A high performance web server
-     Active: active (running) since Tue 09:14:02 UTC; 3 days ago`}</span>
-            </pre>
-            <div className="flex items-center gap-2 border-t border-border bg-destructive/10 px-6 py-3 font-mono text-xs text-destructive">
-              <Eye className="h-3.5 w-3.5 shrink-0" />
-              T1082 System Discovery — logged
+
+            <div className="space-y-5 p-6 text-left font-mono text-sm leading-relaxed">
+              <div>
+                <div className="mb-1.5 font-sans text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
+                  1 · The attacker types
+                </div>
+                <div className="text-terminal-foreground">
+                  <span className="typing">$ systemctl status nginx | head -3</span>
+                </div>
+              </div>
+              <div>
+                <div className="mb-1.5 font-sans text-[10px] font-medium tracking-widest text-primary uppercase">
+                  2 · Mirage invents a believable answer
+                </div>
+                <div className="whitespace-pre-wrap text-terminal-foreground/80">{`● nginx.service - A high performance web server
+     Active: active (running) since Tue 09:14:02 UTC; 3 days ago`}</div>
+              </div>
+            </div>
+
+            <div className="border-t border-border bg-destructive/10 px-6 py-3">
+              <div className="mb-1 font-sans text-[10px] font-medium tracking-widest text-destructive/70 uppercase">
+                3 · The forensic engine quietly logs it
+              </div>
+              <div className="flex items-center gap-2 font-mono text-xs text-destructive">
+                <Eye className="h-3.5 w-3.5 shrink-0" />
+                T1082 System Discovery — alert sent to your SIEM
+              </div>
             </div>
           </div>
         </div>
