@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ApiPublicSensorIngestRouteImport } from './routes/api/public/sensor/ingest'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicSensorIngestRoute = ApiPublicSensorIngestRouteImport.update({
@@ -25,27 +31,31 @@ const ApiPublicSensorIngestRoute = ApiPublicSensorIngestRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/api/public/sensor/ingest': typeof ApiPublicSensorIngestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/api/public/sensor/ingest': typeof ApiPublicSensorIngestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/api/public/sensor/ingest': typeof ApiPublicSensorIngestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/sensor/ingest'
+  fullPaths: '/' | '/auth' | '/api/public/sensor/ingest'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/sensor/ingest'
-  id: '__root__' | '/' | '/api/public/sensor/ingest'
+  to: '/' | '/auth' | '/api/public/sensor/ingest'
+  id: '__root__' | '/' | '/auth' | '/api/public/sensor/ingest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   ApiPublicSensorIngestRoute: typeof ApiPublicSensorIngestRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/sensor/ingest': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   ApiPublicSensorIngestRoute: ApiPublicSensorIngestRoute,
 }
 export const routeTree = rootRouteImport
